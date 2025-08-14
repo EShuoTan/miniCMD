@@ -16,4 +16,4 @@
 // 示例
 #include "demo.h"
 MAKE_CMD(void, fun1, int, uint8_t, float);
-MAKE_CMD(float, fun2, float a, int b, int8_t c);
+MAKE_CMD(float, fun2, float, int, int8_t);

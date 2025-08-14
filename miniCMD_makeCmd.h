@@ -1,5 +1,5 @@
 /**
- * @version 1.0
+ * @version 2.0
  * @file miniCMD.c
  * @link https://github.com/EShuoTan/miniCMD
  * @brief 提供 MAKE_CMD() 宏以添加命令到 miniCMD，可以被任意文件include，
@@ -43,30 +43,30 @@ typedef const struct
 	void (*fun_agent_ptr)(miniCMD_AUTOdata_t *ret, miniCMD_AUTOdata_t *para);
 } miniCMD_cmd_t;
 
-/* 根据类型取相应的数字 */
-#define xxx_miniCMD_AUTOgetData(x) (((x).type == type_f) ? ((x).var.F) : ((x).var.I))
-/* 生成指定个数的宏的序列：xxx_miniCMD_AUTOgetData(para[0]),xxx_miniCMD_AUTOgetData(para[1])... */
-#define xxx_miniCMD_getDatapara_X0
-#define xxx_miniCMD_getDatapara_X1 xxx_miniCMD_AUTOgetData(para[0])
-#define xxx_miniCMD_getDatapara_X2 xxx_miniCMD_getDatapara_X1, xxx_miniCMD_AUTOgetData(para[1])
-#define xxx_miniCMD_getDatapara_X3 xxx_miniCMD_getDatapara_X2, xxx_miniCMD_AUTOgetData(para[2])
-#define xxx_miniCMD_getDatapara_X4 xxx_miniCMD_getDatapara_X3, xxx_miniCMD_AUTOgetData(para[3])
-#define xxx_miniCMD_getDatapara_X5 xxx_miniCMD_getDatapara_X4, xxx_miniCMD_AUTOgetData(para[4])
-#define xxx_miniCMD_getDatapara_X6 xxx_miniCMD_getDatapara_X5, xxx_miniCMD_AUTOgetData(para[5])
-#define xxx_miniCMD_getDatapara_X7 xxx_miniCMD_getDatapara_X6, xxx_miniCMD_AUTOgetData(para[6])
-#define xxx_miniCMD_getDatapara_X8 xxx_miniCMD_getDatapara_X7, xxx_miniCMD_AUTOgetData(para[7])
-#define xxx_miniCMD_getDatapara_X9 xxx_miniCMD_getDatapara_X8, xxx_miniCMD_AUTOgetData(para[8])
-#define xxx_miniCMD_getDatapara_X10 xxx_miniCMD_getDatapara_X9, xxx_miniCMD_AUTOgetData(para[9])
-#define xxx_miniCMD_getDatapara_X11 xxx_miniCMD_getDatapara_X10, xxx_miniCMD_AUTOgetData(para[10])
-#define xxx_miniCMD_getDatapara_X12 xxx_miniCMD_getDatapara_X11, xxx_miniCMD_AUTOgetData(para[11])
-#define xxx_miniCMD_getDatapara_X13 xxx_miniCMD_getDatapara_X12, xxx_miniCMD_AUTOgetData(para[12])
-#define xxx_miniCMD_getDatapara_X14 xxx_miniCMD_getDatapara_X13, xxx_miniCMD_AUTOgetData(para[13])
-#define xxx_miniCMD_getDatapara_X15 xxx_miniCMD_getDatapara_X14, xxx_miniCMD_AUTOgetData(para[14])
-#define xxx_miniCMD_getDatapara_X16 xxx_miniCMD_getDatapara_X15, xxx_miniCMD_AUTOgetData(para[15])
-#define xxx_miniCMD_getDatapara_X17 xxx_miniCMD_getDatapara_X16, xxx_miniCMD_AUTOgetData(para[16])
-#define xxx_miniCMD_getDatapara_X18 xxx_miniCMD_getDatapara_X17, xxx_miniCMD_AUTOgetData(para[17])
-#define xxx_miniCMD_getDatapara_X19 xxx_miniCMD_getDatapara_X18, xxx_miniCMD_AUTOgetData(para[18])
-#define xxx_miniCMD_getDatapara_X20 xxx_miniCMD_getDatapara_X19, xxx_miniCMD_AUTOgetData(para[19])
+/* 根据类型取相应的数字,并显式转为对应类型 */
+#define xxx_miniCMD_getPara(t, i) ((t)(((para[i]).type == type_f) ? ((para[i]).var.F) : ((para[i]).var.I)))
+/* 生成指定个数的宏的序列：xxx_miniCMD_getPara(t0,0), xxx_miniCMD_getPara(t1,1)... */
+#define xxx_miniCMD_getDatapara_X0(...)
+#define xxx_miniCMD_getDatapara_X1(t0) xxx_miniCMD_getPara(t0, 0)
+#define xxx_miniCMD_getDatapara_X2(t0, t1) xxx_miniCMD_getDatapara_X1(t0), xxx_miniCMD_getPara(t1, 1)
+#define xxx_miniCMD_getDatapara_X3(t0, t1, t2) xxx_miniCMD_getDatapara_X2(t0, t1), xxx_miniCMD_getPara(t2, 2)
+#define xxx_miniCMD_getDatapara_X4(t0, t1, t2, t3) xxx_miniCMD_getDatapara_X3(t0, t1, t2), xxx_miniCMD_getPara(t3, 3)
+#define xxx_miniCMD_getDatapara_X5(t0, t1, t2, t3, t4) xxx_miniCMD_getDatapara_X4(t0, t1, t2, t3), xxx_miniCMD_getPara(t4, 4)
+#define xxx_miniCMD_getDatapara_X6(t0, t1, t2, t3, t4, t5) xxx_miniCMD_getDatapara_X5(t0, t1, t2, t3, t4), xxx_miniCMD_getPara(t5, 5)
+#define xxx_miniCMD_getDatapara_X7(t0, t1, t2, t3, t4, t5, t6) xxx_miniCMD_getDatapara_X6(t0, t1, t2, t3, t4, t5), xxx_miniCMD_getPara(t6, 6)
+#define xxx_miniCMD_getDatapara_X8(t0, t1, t2, t3, t4, t5, t6, t7) xxx_miniCMD_getDatapara_X7(t0, t1, t2, t3, t4, t5, t6), xxx_miniCMD_getPara(t7, 7)
+#define xxx_miniCMD_getDatapara_X9(t0, t1, t2, t3, t4, t5, t6, t7, t8) xxx_miniCMD_getDatapara_X8(t0, t1, t2, t3, t4, t5, t6, t7), xxx_miniCMD_getPara(t8, 8)
+#define xxx_miniCMD_getDatapara_X10(t0, t1, t2, t3, t4, t5, t6, t7, t8, t9) xxx_miniCMD_getDatapara_X9(t0, t1, t2, t3, t4, t5, t6, t7, t8), xxx_miniCMD_getPara(t9, 9)
+#define xxx_miniCMD_getDatapara_X11(t0, t1, t2, t3, t4, t5, t6, t7, t8, t10) xxx_miniCMD_getDatapara_X10(t0, t1, t2, t3, t4, t5, t6, t7, t8), xxx_miniCMD_getPara(t10, 10)
+#define xxx_miniCMD_getDatapara_X12(t0, t1, t2, t3, t4, t5, t6, t7, t8, t10, t11) xxx_miniCMD_getDatapara_X11(t0, t1, t2, t3, t4, t5, t6, t7, t8, t10), xxx_miniCMD_getPara(t11, 11)
+#define xxx_miniCMD_getDatapara_X13(t0, t1, t2, t3, t4, t5, t6, t7, t8, t10, t11, t12) xxx_miniCMD_getDatapara_X12(t0, t1, t2, t3, t4, t5, t6, t7, t8, t10, t11), xxx_miniCMD_getPara(t12, 12)
+#define xxx_miniCMD_getDatapara_X14(t0, t1, t2, t3, t4, t5, t6, t7, t8, t10, t11, t12, t13) xxx_miniCMD_getDatapara_X13(t0, t1, t2, t3, t4, t5, t6, t7, t8, t10, t11, t12), xxx_miniCMD_getPara(t13, 13)
+#define xxx_miniCMD_getDatapara_X15(t0, t1, t2, t3, t4, t5, t6, t7, t8, t10, t11, t12, t13, t14) xxx_miniCMD_getDatapara_X14(t0, t1, t2, t3, t4, t5, t6, t7, t8, t10, t11, t12, t13), xxx_miniCMD_getPara(t14, 14)
+#define xxx_miniCMD_getDatapara_X16(t0, t1, t2, t3, t4, t5, t6, t7, t8, t10, t11, t12, t13, t14, t15) xxx_miniCMD_getDatapara_X15(t0, t1, t2, t3, t4, t5, t6, t7, t8, t10, t11, t12, t13, t14), xxx_miniCMD_getPara(t15, 15)
+#define xxx_miniCMD_getDatapara_X17(t0, t1, t2, t3, t4, t5, t6, t7, t8, t10, t11, t12, t13, t14, t15, t16) xxx_miniCMD_getDatapara_X16(t0, t1, t2, t3, t4, t5, t6, t7, t8, t10, t11, t12, t13, t14, t15), xxx_miniCMD_getPara(t16, 16)
+#define xxx_miniCMD_getDatapara_X18(t0, t1, t2, t3, t4, t5, t6, t7, t8, t10, t11, t12, t13, t14, t15, t16, t17) xxx_miniCMD_getDatapara_X17(t0, t1, t2, t3, t4, t5, t6, t7, t8, t10, t11, t12, t13, t14, t15, t16), xxx_miniCMD_getPara(t17, 17)
+#define xxx_miniCMD_getDatapara_X19(t0, t1, t2, t3, t4, t5, t6, t7, t8, t10, t11, t12, t13, t14, t15, t16, t17, t18) xxx_miniCMD_getDatapara_X18(t0, t1, t2, t3, t4, t5, t6, t7, t8, t10, t11, t12, t13, t14, t15, t16, t17), xxx_miniCMD_getPara(t18, 18)
+#define xxx_miniCMD_getDatapara_X20(t0, t1, t2, t3, t4, t5, t6, t7, t8, t10, t11, t12, t13, t14, t15, t16, t17, t18, t19) xxx_miniCMD_getDatapara_X19(t0, t1, t2, t3, t4, t5, t6, t7, t8, t10, t11, t12, t13, t14, t15, t16, t17, t18), xxx_miniCMD_getPara(t19, 19)
 
 /* 获取参数列表的第n个 */
 #define GET_ARGS_1th(_1, ...) _1
@@ -101,7 +101,6 @@ typedef const struct
 #define COUNT_ARGS_IS_EMPTY_0(...) \
 	GET_ARGS_21th(__VA_ARGS__, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
 #define COUNT_ARGS_max20(...) GLUE(COUNT_ARGS_IS_EMPTY_, IS_EMPTY(__VA_ARGS__))(__VA_ARGS__)
-
 /* 实现判断参数个数，如果第一个参数为 "void"，则返回 0 */
 #define COUNT_PARA(...) \
 	vfi_TYPE_MATCH(GET_ARGS_1th(__VA_ARGS__), 0, COUNT_ARGS_max20(__VA_ARGS__), COUNT_ARGS_max20(__VA_ARGS__))
@@ -113,7 +112,7 @@ typedef const struct
 	{                                                                                            \
 		ret->type = vfi_TYPE_MATCH(ret_type, type_void, type_f, type_i);                         \
 		vfi_TYPE_MATCH(ret_type, , ret->var.F =, ret->var.I =)                                   \
-			name(GLUE(xxx_miniCMD_getDatapara_X, COUNT_PARA(__VA_ARGS__)));                      \
+			name(GLUE(xxx_miniCMD_getDatapara_X, COUNT_PARA(__VA_ARGS__))(__VA_ARGS__));         \
 	}                                                                                            \
 	USED IN_CMDs_SECTION const miniCMD_cmd_t x___miniCMD_cmd_##name =                            \
 		{.fun_name = #name,                                                                      \
